@@ -15,14 +15,18 @@ import {
 
 import { Button } from "@/components/ui/button"
 
-import { plTeams } from '@/lib/utils'
-
 import { getTeams } from '@/requests/requests'
+
+type Team = {
+  id: number,
+  name: string,
+  club_key: string
+}
 
 const TeamSelectModal = () => {
 
   const [value, setValue] = useState("");
-  const [searchResult, setSearchResult] = useState<string[]>([]);
+  const [searchResult, setSearchResult] = useState<Team[]>([]);
   const [teamsArr, setTeamsArr] = useState([]);
 
   const fetchTeams = async () => {
@@ -39,11 +43,13 @@ const TeamSelectModal = () => {
   useEffect(() => {
     const filterTeamArray = () => {
       if (value.length >= 3) {
-        const filteredTeams = plTeams.filter((team: string) => {
-          const splitName = team.substring(0, 3);
+        const filteredTeams = teamsArr.filter((team: Team) => {
+          const splitName = team.name.substring(0, 3);
+          console.log(splitName)
           return splitName.toLowerCase().includes(value);
         })
 
+        console.log(filteredTeams)
         setSearchResult(filteredTeams);
         return
       }
@@ -51,7 +57,7 @@ const TeamSelectModal = () => {
     };
 
     filterTeamArray();
-  }, [value]);
+  }, [value, teamsArr]);
 
   return (
     <DialogContent>
@@ -63,8 +69,8 @@ const TeamSelectModal = () => {
               {searchResult &&
                 searchResult.map((team, index) => (
                   <div key={index} className='flex justify-between py-1.5 px-2 items-center'>
-                    <span>{team}</span>
-                    <Button onClick={() => setValue(team)}>Guess</Button>
+                    <span>{team.name}</span>
+                    <Button onClick={() => setValue(team.name)}>Guess</Button>
                   </div>
                 ))
               }

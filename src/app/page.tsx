@@ -3,7 +3,7 @@ import { Trophy } from "lucide-react";
 import Link from "next/link";
 import {
   Dialog,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import TeamSelectModal from "@/components/TeamSelectModal";
 
 export default function Home() {
@@ -37,12 +37,12 @@ export default function Home() {
             </div>
             <div className="border border-slate-200">
               <div className="flex flex-row border-b border-slate-200">
-                <SquareGrid img='https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg' />
+                <SquareGrid />
                 <SquareGrid />
                 <SquareGrid />
               </div>
               <div className="flex flex-row border-b border-slate-200">
-                <SquareGrid img='https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/800px-Manchester_United_FC_crest.svg.png' />
+                <SquareGrid />
                 <SquareGrid />
                 <SquareGrid />
               </div>
