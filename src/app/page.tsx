@@ -1,16 +1,46 @@
-"use client";
+"use client"
 
-import SquareGrid from "@/components/SquareGrid";
+import SquareGrid from "@/components/GridCell";
 import { Trophy } from "lucide-react";
 import Link from "next/link";
-import { Dialog } from "@/components/ui/dialog";
+import {
+  Dialog,
+} from "@/components/ui/dialog";
 import TeamSelectModal from "@/components/TeamSelectModal";
-import { useApi } from "@/hooks/apiHook";
+import { useState, useEffect } from "react";
+import { getTodayGrid } from "@/requests/requests";
+
+type GridTips = {
+  id: number,
+  i: number,
+  j: number,
+  description: string
+};
+
+type PuzzleGrid = {
+  active_on: string,
+  grid_columns: number,
+  grid_numbers: number,
+  grid_rows: number,
+  grid_tips: Array<GridTips>
+  id: number
+};
 
 export default function Home() {
-  const { api } = useApi();
+  const [todayGrid, setTodayGrid] = useState<PuzzleGrid>();
 
-  console.log(api);
+  const fetchTodayGrid = async () => {
+    //Implementar loading (manual ou SWR)
+    const data = await getTodayGrid();
+    if (!data.status) {
+      setTodayGrid(data);
+    };
+  };
+
+  useEffect(() => {
+    fetchTodayGrid();
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b border-slate-200 bg-background px-4 md:px-6 justify-center">
@@ -26,47 +56,39 @@ export default function Home() {
         </nav>
       </header>
       <Dialog>
-        <div className="flex flex-col md:mr-32 place-items-center">
+        <div className="flex flex-col md:mr-32 place-items-center mt-16">
           <div className="flex flex-row">
             <div className="w-24 md:w-40 h-20 text-center content-end pb-4" />
-            <div className="w-24 md:w-40 h-20 text-center content-end pb-4">
-              Tip
-            </div>
-            <div className="w-24 md:w-40 h-20 text-center content-end pb-4">
-              Tip
-            </div>
-            <div className="w-24 md:w-40 h-20 text-center content-end pb-4">
-              Tip
-            </div>
+            {todayGrid?.grid_tips?.map((tip) => {
+              if (tip.i !== null) {
+                return (
+                  <div className="w-24 md:w-40 h-20 text-center content-end pb-4" key={tip.id}>{tip.description}</div>
+                )
+              }
+            })
+            }
           </div>
           <div className="flex flex-row">
             <div className="flex flex-col">
-              <div className="size-24 md:size-40 text-center content-center">
-                Tip
-              </div>
-              <div className="size-24 md:size-40 text-center content-center">
-                Tip
-              </div>
-              <div className="size-24 md:size-40 text-center content-center">
-                Tip
-              </div>
+              {todayGrid?.grid_tips?.map((tip) => {
+                if (tip.j !== null) {
+                  return (
+                    <div className="size-24 md:size-40 text-center content-center" key={tip.id}>{tip.description}</div>
+                  )
+                }
+              })
+              }
             </div>
             <div className="border border-slate-200">
-              <div className="flex flex-row border-b border-slate-200">
-                <SquareGrid img="https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg" />
-                <SquareGrid />
-                <SquareGrid />
-              </div>
-              <div className="flex flex-row border-b border-slate-200">
-                <SquareGrid img="https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/800px-Manchester_United_FC_crest.svg.png" />
-                <SquareGrid />
-                <SquareGrid />
-              </div>
-              <div className="flex flex-row">
-                <SquareGrid />
-                <SquareGrid />
-                <SquareGrid />
-              </div>
+              {todayGrid && Array.from({ length: todayGrid.grid_rows }).map((_item, index, { length }) => (
+                <div className={`flex flex-row ${length - 1 !== index ? 'border-b border-slate-200' : ''}`} key={index}>
+                  {Array.from({ length: todayGrid.grid_columns }).map((_item, index) => (
+                    <SquareGrid key={index} />
+                  ))
+                  }
+                </div>
+              ))
+              }
             </div>
           </div>
         </div>
