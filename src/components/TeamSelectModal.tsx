@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button"
 
 import { getTeams } from '@/requests/requests'
 
-type Team = {
+export type Team = {
   id: number,
   name: string,
   club_key: string
@@ -27,17 +27,21 @@ const TeamSelectModal = () => {
 
   const [value, setValue] = useState("");
   const [searchResult, setSearchResult] = useState<Team[]>([]);
-  const [teamsArr, setTeamsArr] = useState([]);
+  const [teamsArr, setTeamsArr] = useState<Team[]>([]);
 
-  const fetchTeams = async () => {
-    const data = await getTeams();
-    if (!data.status) {
-      setTeamsArr(data);
-    };
-  };
+  const fetchTeam = async () => {
+    try {
+      getTeams().then((res) => {
+        setTeamsArr(res.data);
+      })
+    }
+    catch (err) {
+      console.error(err)
+    }
+  }
 
   useEffect(() => {
-    if (teamsArr.length === 0) fetchTeams();
+    fetchTeam();
   }, [teamsArr]);
 
   const filterTeamArray = useCallback(() => {
