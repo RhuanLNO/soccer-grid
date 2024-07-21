@@ -83,6 +83,8 @@ const useClubs = () => {
   if (!clubsHook) {
     throw new Error("useClubs must be called within a ClubsProvider context");
   }
+
+  return clubsHook;
 };
 
 export { ClubsProvider, useClubs };
