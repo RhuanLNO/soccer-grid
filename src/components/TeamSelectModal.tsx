@@ -6,59 +6,41 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog"
-
 import {
   Command,
   CommandInput,
   CommandList,
 } from "@/components/ui/command"
-
 import { Button } from "@/components/ui/button"
+import { useClubs } from "@/hooks/clubsHook"
 
-import { getTeams } from '@/requests/requests'
-
-export type Team = {
-  id: number,
-  name: string,
-  club_key: string
-}
+type Club = {
+  clubKey: string;
+  name: string;
+};
 
 const TeamSelectModal = () => {
 
+  const { clubs } = useClubs();
+
   const [value, setValue] = useState("");
-  const [searchResult, setSearchResult] = useState<Team[]>([]);
-  const [teamsArr, setTeamsArr] = useState<Team[]>([]);
+  const [searchResult, setSearchResult] = useState<Club[]>([]);
 
-  const fetchTeam = async () => {
-    try {
-      getTeams().then((res) => {
-        setTeamsArr(res.data);
-      })
-    }
-    catch (err) {
-      console.error(err)
-    }
-  }
-
-  useEffect(() => {
-    fetchTeam();
-  }, [teamsArr]);
-
-  const filterTeamArray = useCallback(() => {
+  const filterClubArray = useCallback(() => {
     if (value.length >= 3) {
-      const filteredTeams = teamsArr.filter((team: Team) => {
-        const splitName = team.name.substring(0, 3);
+      const filteredClubs = clubs.filter((club: Club) => {
+        const splitName = club.name.substring(0, 3);
         return splitName.toLowerCase().includes(value);
       })
-      setSearchResult(filteredTeams);
+      setSearchResult(filteredClubs);
       return
     }
     setSearchResult([]);
-  }, [value, teamsArr])
+  }, [value, clubs])
 
   useEffect(() => {
-    filterTeamArray();
-  }, [filterTeamArray]);
+    filterClubArray();
+  }, [filterClubArray]);
 
   return (
     <DialogContent>
