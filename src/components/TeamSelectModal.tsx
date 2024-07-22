@@ -1,26 +1,17 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react";
 import {
   DialogContent,
   DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
-import {
-  Command,
-  CommandInput,
-  CommandList,
-} from "@/components/ui/command"
-import { Button } from "@/components/ui/button"
-import { useClubs } from "@/hooks/clubsHook"
-
-type Club = {
-  clubKey: string;
-  name: string;
-};
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Command, CommandInput, CommandList } from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { useClubs } from "@/hooks/clubsHook";
+import { Club } from "@/types/clubTypes";
 
 const TeamSelectModal = () => {
-
   const { clubs } = useClubs();
 
   const [value, setValue] = useState("");
@@ -31,12 +22,12 @@ const TeamSelectModal = () => {
       const filteredClubs = clubs.filter((club: Club) => {
         const splitName = club.name.substring(0, 3);
         return splitName.toLowerCase().includes(value);
-      })
+      });
       setSearchResult(filteredClubs);
-      return
+      return;
     }
     setSearchResult([]);
-  }, [value, clubs])
+  }, [value, clubs]);
 
   useEffect(() => {
     filterClubArray();
@@ -47,21 +38,27 @@ const TeamSelectModal = () => {
       <DialogHeader>
         <DialogTitle />
         <Command className="rounded-lg border shadow-md !mt-5">
-          <CommandInput placeholder="Type a command or search..." value={value} onValueChange={(e) => setValue(e)} />
+          <CommandInput
+            placeholder="Type a command or search..."
+            value={value}
+            onValueChange={(e) => setValue(e)}
+          />
           <CommandList>
             {searchResult &&
               searchResult.map((team, index) => (
-                <div key={index} className='flex justify-between py-1.5 px-2 items-center'>
+                <div
+                  key={index}
+                  className="flex justify-between py-1.5 px-2 items-center"
+                >
                   <span>{team.name}</span>
                   <Button onClick={() => setValue(team.name)}>Guess</Button>
                 </div>
-              ))
-            }
+              ))}
           </CommandList>
         </Command>
       </DialogHeader>
     </DialogContent>
-  )
-}
+  );
+};
 
-export default TeamSelectModal
+export default TeamSelectModal;
