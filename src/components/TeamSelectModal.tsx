@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useMemo, useState } from "react";
 import {
   DialogContent,
   DialogHeader,
@@ -10,29 +10,21 @@ import { Command, CommandInput, CommandList } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { useClubs } from "@/hooks/clubsHook";
 import { Club } from "@/types/clubTypes";
+import { clubSearchCompare } from "@/lib/clubUtils";
 
 const TeamSelectModal = () => {
   const { clubs } = useClubs();
 
   const [value, setValue] = useState("");
-  const [searchResult, setSearchResult] = useState<Club[]>([]);
-
-  const filterClubArray = useCallback(() => {
-    if (value.length >= 3) {
-      const filteredClubs = clubs.filter((club: Club) => {
-        const splitName = club.name.substring(0, 3);
-        return splitName.toLowerCase().includes(value);
-      });
-      setSearchResult(filteredClubs);
-      return;
+  const filteredList = useMemo(() => {
+    if (value.length < 3) {
+      return [];
     }
-    setSearchResult([]);
+
+    return clubs.filter((club: Club) => {
+      return clubSearchCompare(club, value);
+    });
   }, [value, clubs]);
-
-  useEffect(() => {
-    filterClubArray();
-  }, [filterClubArray]);
-
   return (
     <DialogContent>
       <DialogHeader>
@@ -44,8 +36,8 @@ const TeamSelectModal = () => {
             onValueChange={(e) => setValue(e)}
           />
           <CommandList>
-            {searchResult &&
-              searchResult.map((team, index) => (
+            {filteredList &&
+              filteredList.map((team, index) => (
                 <div
                   key={index}
                   className="flex justify-between py-1.5 px-2 items-center"
