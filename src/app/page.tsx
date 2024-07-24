@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   Dialog,
 } from "@/components/ui/dialog";
-import TeamSelectModal from "@/components/TeamSelectModal";
+import ClubSelectModal from "@/components/ClubSelectModal";
 import { useState, useEffect, useCallback } from "react";
 import { useApi } from "@/hooks/apiHook";
 import { AxiosError } from "axios";
@@ -115,7 +115,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <TeamSelectModal />
+        <ClubSelectModal />
       </Dialog>
     </main>
   );

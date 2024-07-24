@@ -11,11 +11,7 @@ import {
 } from "react";
 import { useApi } from "@/hooks/apiHook";
 import { AxiosError } from "axios";
-
-type Club = {
-  clubKey: string;
-  name: string;
-};
+import { Club } from "@/types/clubTypes";
 
 type SnakeCaseClub = {
   club_key: string;
