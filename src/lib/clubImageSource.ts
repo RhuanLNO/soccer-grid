@@ -1,11 +1,11 @@
-import { clubImages } from "@/lib/clubImages";
+import { clubImages } from '@/lib/clubImages';
 
 const clubImageSource = (clubKey: string) => {
   if (clubImages[clubKey]) {
-    return "clubs/" + clubImages[clubKey];
+    return 'clubs/' + clubImages[clubKey];
   } else {
     // TODO: Add a default image
-    throw Error("Club image not found");
+    throw Error('Club image not found');
   }
 };
 
