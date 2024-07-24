@@ -12,7 +12,7 @@ import { useClubs } from "@/hooks/clubsHook";
 import { Club } from "@/types/clubTypes";
 import { clubSearchCompare } from "@/lib/clubUtils";
 
-const TeamSelectModal = () => {
+const ClubSelectModal = () => {
   const { clubs } = useClubs();
 
   const [value, setValue] = useState("");
@@ -21,9 +21,9 @@ const TeamSelectModal = () => {
       return [];
     }
 
-    return clubs.filter((club: Club) => {
+    return clubs?.filter((club: Club) => {
       return clubSearchCompare(club, value);
-    });
+    }) ?? [];
   }, [value, clubs]);
   return (
     <DialogContent>
@@ -36,7 +36,7 @@ const TeamSelectModal = () => {
             onValueChange={(e) => setValue(e)}
           />
           <CommandList>
-            {filteredList &&
+            {
               filteredList.map((team, index) => (
                 <div
                   key={index}
@@ -53,4 +53,4 @@ const TeamSelectModal = () => {
   );
 };
 
-export default TeamSelectModal;
+export default ClubSelectModal;
