@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { createContext, ReactNode, useContext } from "react";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance } from 'axios';
+import { ReactNode, createContext, useContext } from 'react';
 
 type ApiHook = {
   api: AxiosInstance;
@@ -16,7 +16,7 @@ const ApiContext = createContext<ApiHook | null>(null);
 const ApiProvider = ({ children }: ApiProviderParams) => {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
   if (!baseURL) {
-    throw new Error("NEXT_PUBLIC_API_URL must be defined");
+    throw new Error('NEXT_PUBLIC_API_URL must be defined');
   }
 
   const api = axios.create({
@@ -30,7 +30,7 @@ const useApi = () => {
   const apiHook = useContext(ApiContext);
 
   if (!apiHook) {
-    throw new Error("useApi must be called within a ApiProvider context");
+    throw new Error('useApi must be called within a ApiProvider context');
   }
 
   return apiHook;

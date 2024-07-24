@@ -1,17 +1,18 @@
-"use client";
+'use client';
 
+import { AxiosError } from 'axios';
 import {
-  createContext,
   ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
-} from "react";
-import { useApi } from "@/hooks/apiHook";
-import { AxiosError } from "axios";
-import { Club } from "@/types/clubTypes";
+} from 'react';
+
+import { useApi } from '@/hooks/apiHook';
+import { Club } from '@/types/clubTypes';
 
 type SnakeCaseClub = {
   club_key: string;
@@ -31,8 +32,8 @@ type ClubsProviderProps = {
 
 const mapClubFields = (snakeCaseClub: SnakeCaseClub): Club => {
   return {
-    clubKey: snakeCaseClub["club_key"],
-    name: snakeCaseClub["name"],
+    clubKey: snakeCaseClub['club_key'],
+    name: snakeCaseClub['name'],
   };
 };
 
@@ -48,12 +49,12 @@ const ClubsProvider = ({ children }: ClubsProviderProps) => {
 
   const fetchClubs = useCallback(async () => {
     try {
-      const response = await api.get<SnakeCaseClub[]>("api/v1/clubs");
+      const response = await api.get<SnakeCaseClub[]>('api/v1/clubs');
 
       setClubs(response.data.map(mapClubFields));
     } catch (error) {
       if (error instanceof AxiosError) {
-        setError(error.response?.data?.message ?? "An error occurred");
+        setError(error.response?.data?.message ?? 'An error occurred');
         console.error(error);
       } else {
         throw error;
@@ -77,7 +78,7 @@ const ClubsProvider = ({ children }: ClubsProviderProps) => {
 const useClubs = () => {
   const clubsHook = useContext(ClubsContext);
   if (!clubsHook) {
-    throw new Error("useClubs must be called within a ClubsProvider context");
+    throw new Error('useClubs must be called within a ClubsProvider context');
   }
 
   return clubsHook;
